@@ -24,8 +24,17 @@ const findNoteByTitle = (noteTitle, notes) => {
     return false;
 }
 
+const getNoteByTitle = (noteTitle, notes) => {
+    for (const i in notes) {
+        if (notes[i].title == noteTitle)
+            return notes[i];
+    }
+    return;
+}
+
 module.exports = {
     loadNotes,
     saveNotes,
-    findNoteByTitle
+    findNoteByTitle,
+    getNoteByTitle
 }

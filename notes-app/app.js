@@ -1,7 +1,7 @@
 const { demandOption, describe } = require('yargs');
 // Node modules
 const yargs = require('yargs');
-const { loadNotes, saveNotes, findNoteByTitle } = require('./notes')
+const { loadNotes, saveNotes, findNoteByTitle, getNoteByTitle } = require('./notes')
 
 yargs
   .command({
@@ -64,14 +64,27 @@ yargs
     }
   })
   .command ({
-    command: "ls",
+    command: ['list', 'ls'],
     describe: "List notes",
     handler: () => {
       const notes = loadNotes();
       for (const i in notes) {
         console.log(`Title: ${notes[i].title}`);
         console.log(`Description: ${notes[i].description}`);
-        console.log("-------------------------");
+        console.log("------------");
       }
+    }
+  })
+  .command({
+    command: 'read',
+    describe: "Read a note",
+    handler: ({title}) => {
+      const notes = loadNotes();
+      if (!findNoteByTitle(title, notes)) {
+        console.log(`${title} doesn't exist`);
+        return;
+      }
+      const note = getNoteByTitle(title, notes);
+      console.log(`Description: ${note.description}`);
     }
   }).argv;
