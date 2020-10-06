@@ -64,7 +64,8 @@ yargs
     }
   })
   .command ({
-    command: ['list', 'ls'],
+    command: 'list',
+    aliases: 'ls', 
     describe: "List notes",
     handler: () => {
       const notes = loadNotes();
