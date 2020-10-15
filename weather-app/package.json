@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/FriedCorn/kmin-nodejs-3/issues"
   },
-  "homepage": "https://github.com/FriedCorn/kmin-nodejs-3#readme"
+  "homepage": "https://github.com/FriedCorn/kmin-nodejs-3#readme",
+  "dependencies": {
+    "request": "^2.88.2",
+    "yargs": "^16.0.3"
+  }
 }
