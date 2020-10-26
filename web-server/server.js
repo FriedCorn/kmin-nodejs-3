@@ -12,6 +12,7 @@ const port = 3000
 //     });
 // })
 
+
 const appName = '<h1><b>Twitter</b></h1>';
 
 const naviBarPage = (path, barItems) => {
