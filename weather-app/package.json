@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/FriedCorn/kmin-nodejs-3#readme",
   "dependencies": {
+    "express": "^4.17.1",
+    "express-handlebars": "^5.1.0",
     "request": "^2.88.2",
     "yargs": "^16.0.3"
   }

@@ -12,7 +12,7 @@ const port = 3000
 //     });
 // })
 
-const appName = 'Twitter'.bold().fontcolor('red').big().italics();
+const appName = '<h1><b>Twitter</b></h1>';
 
 const naviBarPage = (path, barItems) => {
     let naviBar = '<ul>';
@@ -48,15 +48,15 @@ const barPageItems = [
 ];
 
 app.get('/', (req, res) => {
-    res.send(appName + naviBarPage(req.path, barPageItems) + contentPage('This is Twitter'));
+    res.send(appName.fontcolor("red").italics() + naviBarPage(req.path, barPageItems) + contentPage('This is Twitter'));
 })
 
 app.get('/home', (req, res) => {
-    res.send(appName + naviBarPage(req.path, barPageItems) + contentPage('This is Home Page'));
+    res.send(appName.fontcolor("red").italics() + naviBarPage(req.path, barPageItems) + contentPage('This is Home Page'));
 })
 
 app.get('/explore', (req, res) => {
-    res.send(appName + naviBarPage(req.path, barPageItems) + contentPage('This is Explore Page'));
+    res.send(appName.fontcolor("red").italics() + naviBarPage(req.path, barPageItems) + contentPage('This is Explore Page'));
     
 })
 

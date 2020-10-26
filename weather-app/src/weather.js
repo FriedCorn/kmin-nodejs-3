@@ -1,34 +1,37 @@
 const request = require('request');
 
 const searchLocation = (location, callback) => {
-    request(`https://www.metaweather.com/api/location/search/?query=${location}`, { json: true }, (error, response, body) => {
+    request(`https://www.metaweather.com/api/location/search/?query=${location}`, { json: true }, (error, res, body) => {
+        if (error) {
+            callback(error, undefined);
+        }
         if (body.length == 0) {
             callback(`No location found for "${location}"`, undefined);
             return;
         }
-        if (body.length > 1) {
-            const limit = 5;
+        // if (body.length > 1) {
+        //     const limit = 5;
 
-            console.log(
-                body
-                    .splice(0, limit)
-                    .map((item) => item.title)
-                    .join(", ")
-            );
+        //     console.log(
+        //         body
+        //             .splice(0, limit)
+        //             .map((item) => item.title)
+        //             .join(", ")
+        //     );
 
-            if (body.length > 0) {
-                console.log(`and ${body.length} more location`);
-            }
+        //     if (body.length > 0) {
+        //         console.log(`and ${body.length} more location`);
+        //     }
 
-            return;
-        }
+        //     return;
+        // }
 
-        callback(null, body[0]);
+        callback(null, body);
     });
 }
 
 const getLocationWeather = ({ locationWoeid, date }, callback) => {
-    request(`https://www.metaweather.com/api/location/${locationWoeid}/`, { json: true }, (err, res, body) => {
+    request(`https://www.metaweather.com/api/location/${locationWoeid}/`, { json: true }, (err, body) => {
         if (body.length == 0) {
             callback("No data found", undefined);
             return;
