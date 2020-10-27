@@ -39,10 +39,9 @@ const getLocationWeather = ({locationWoeid, date}, callback) => {
         if (body.length == 0) {
             callback("No data found", undefined);
             return;
-        }
-        const weather = body.consolidated_weather;
+        } 
         if (date == "") {
-            callback(null, weather);
+            callback(null, body);
             return;
         }
         // checkAndConvertDate(date, (error, dateConverted) => {

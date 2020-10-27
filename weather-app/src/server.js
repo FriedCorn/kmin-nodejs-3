@@ -23,12 +23,14 @@ app.get('/', (req, res) => {
 app.get('/weatherForecast/:locationWoeid', (req, res) => {
     const locationWoeid = req.path.split("/weatherForecast/")[1]*1;
     const date = "";
-    getLocationWeather({locationWoeid, date}, (error, weathers) => {
+    getLocationWeather({locationWoeid, date}, (error, detailLocation) => {
+        const weathers = detailLocation.consolidated_weather;
+        const locationName = detailLocation.title;
         for (const i in weathers) {
             weathers[i].min_temp = Math.round(weathers[i].min_temp);
             weathers[i].max_temp = Math.round(weathers[i].max_temp);
         }
-        res.render('weather_forecast', {weathers, error});
+        res.render('weather_forecast', {weathers, locationName, error});
     })
 });
 

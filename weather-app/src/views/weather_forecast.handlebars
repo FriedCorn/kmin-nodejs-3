@@ -1,9 +1,11 @@
-<h2>Weather ForeCast</h2>
-
+<h1>Weather App</h1>
+<br>
+<i><h3>{{locationName}}'s weather</h3></i>
 {{#if error}}
 <p><b>Error:</b> {{error}}</p>
 {{/if}}
 
+{{#if weathers}}
 <table>
     <thead>
         <tr>
@@ -15,13 +17,19 @@
     <tbody>
         <tr>
             {{#each weathers}}
+            <td><img src="https://www.metaweather.com//static/img/weather/{{this.weather_state_abbr}}.svg" alt="Icon" width="80" height="80"></td>
+            {{/each}}
+        </tr>
+        <tr>
+            {{#each weathers}}
             <td>{{this.weather_state_name}}</td>
             {{/each}}
         </tr>
         <tr>
             {{#each weathers}}
-            <td>{{this.min_temp}} - {{this.max_temp}} (Celsius)</td>
+            <td>{{this.min_temp}}°C - {{this.max_temp}}°C</td>
             {{/each}}
         </tr>
     </tbody>
 </table>
+{{/if}}
