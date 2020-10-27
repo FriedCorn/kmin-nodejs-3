@@ -30,30 +30,34 @@ const searchLocation = (location, callback) => {
     });
 }
 
-const getLocationWeather = ({ locationWoeid, date }, callback) => {
-    request(`https://www.metaweather.com/api/location/${locationWoeid}/`, { json: true }, (err, body) => {
+const getLocationWeather = ({locationWoeid, date}, callback) => {
+    request(`https://www.metaweather.com/api/location/${locationWoeid}/`, { json: true }, (error, res, body) => {
+        if (error) {
+            callback(error, undefined);
+            return;
+        }
         if (body.length == 0) {
             callback("No data found", undefined);
             return;
         }
         const weather = body.consolidated_weather;
-        if (date == undefined) {
-            callback(null, weather[0]);
+        if (date == "") {
+            callback(null, weather);
             return;
         }
-        checkAndConvertDate(date, (error, dateConverted) => {
-            if (error) {
-                callback(error, undefined);
-                return;
-            }
-            for (const i in weather) {
-                if (weather[i].applicable_date == dateConverted) {
-                    callback(null, weather[i]);
-                    return;
-                }
-            }
-            callback(`No weather data of ${date}`, undefined);
-        })
+        // checkAndConvertDate(date, (error, dateConverted) => {
+        //     if (error) {
+        //         callback(error, undefined);
+        //         return;
+        //     }
+        //     for (const i in weather) {
+        //         if (weather[i].applicable_date == dateConverted) {
+        //             callback(null, weather[i]);
+        //             return;
+        //         }
+        //     }
+        //     callback(`No weather data of ${date}`, undefined);
+        // });
     })
 }
 
@@ -97,5 +101,5 @@ const checkAndConvertDate = (date, callback) => {
 
 module.exports = {
     searchLocation,
-    getLocationWeather
+    getLocationWeather,
 }

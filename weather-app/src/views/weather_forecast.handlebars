@@ -1,0 +1,27 @@
+<h2>Weather ForeCast</h2>
+
+{{#if error}}
+<p><b>Error:</b> {{error}}</p>
+{{/if}}
+
+<table>
+    <thead>
+        <tr>
+            {{#each weathers}}
+            <th>{{this.applicable_date}}</th>
+            {{/each}}
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            {{#each weathers}}
+            <td>{{this.weather_state_name}}</td>
+            {{/each}}
+        </tr>
+        <tr>
+            {{#each weathers}}
+            <td>{{this.min_temp}} - {{this.max_temp}} (Celsius)</td>
+            {{/each}}
+        </tr>
+    </tbody>
+</table>

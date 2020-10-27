@@ -18,9 +18,20 @@ app.get('/', (req, res) => {
     searchLocation(searchText, (error, locations) => {
         res.render('home', {searchText, locations, error});
     });
+});
 
+app.get('/weatherForecast/:locationWoeid', (req, res) => {
+    const locationWoeid = req.path.split("/weatherForecast/")[1]*1;
+    const date = "";
+    getLocationWeather({locationWoeid, date}, (error, weathers) => {
+        for (const i in weathers) {
+            weathers[i].min_temp = Math.round(weathers[i].min_temp);
+            weathers[i].max_temp = Math.round(weathers[i].max_temp);
+        }
+        res.render('weather_forecast', {weathers, error});
+    })
 });
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
-})
+});
