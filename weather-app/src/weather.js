@@ -32,6 +32,10 @@ const searchLocation = (location, callback) => {
 
 const getLocationWeather = ({locationWoeid, date}, callback) => {
     request(`https://www.metaweather.com/api/location/${locationWoeid}/`, { json: true }, (error, res, body) => {
+        if (body.detail == "Not found.") {
+            callback("Location not found", undefined);
+            return;
+        }
         if (error) {
             callback(error, undefined);
             return;

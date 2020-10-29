@@ -21,14 +21,19 @@ app.get('/', (req, res) => {
 });
 
 app.get('/weatherForecast/:locationWoeid', (req, res) => {
-    const locationWoeid = req.path.split("/weatherForecast/")[1]*1;
+    const locationWoeid = req.params.locationWoeid;
     const date = "";
     getLocationWeather({locationWoeid, date}, (error, detailLocation) => {
+        if (error) {
+            res.render('error', {error});
+            return;
+        }
         const weathers = detailLocation.consolidated_weather;
         const locationName = detailLocation.title;
         for (const i in weathers) {
             weathers[i].min_temp = Math.round(weathers[i].min_temp);
             weathers[i].max_temp = Math.round(weathers[i].max_temp);
+            weathers[i].applicable_date = convertDate(weathers[i].applicable_date);
         }
         res.render('weather_forecast', {weathers, locationName, error});
     })
@@ -37,3 +42,8 @@ app.get('/weatherForecast/:locationWoeid', (req, res) => {
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
 });
+
+const convertDate = (date) => {
+    const dateConverted = date[8] + date[9] + '-' + date[5] + date[6] + '-' + date[0] + date[1] + date[2] + date[3];
+    return dateConverted;
+}
