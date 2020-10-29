@@ -5,7 +5,7 @@ const searchLocation = (location, callback) => {
         if (error) {
             callback(error, undefined);
         }
-        if (body.length == 0) {
+        if (!body || body.length == 0) {
             callback(`No location found for "${location}"`, undefined);
             return;
         }
