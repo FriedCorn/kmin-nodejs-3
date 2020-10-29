@@ -6,6 +6,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.engine('handlebars', exphbs());
+app.set("views", path.join(__dirname, "views"));
 app.set('view engine', 'handlebars');
 
 app.get('/', (req, res) => {
