@@ -1,0 +1,23 @@
+{
+  "name": "todolist-app",
+  "version": "1.0.0",
+  "description": "- [ ] Them/xoa/sua task - [ ] List tasks - [ ] Dang ki/dang nhap - [ ] Categorize - [ ] Sort tasks: Priority, Due Date, Title - [ ] Search tasks: Title",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FriedCorn/kmin-nodejs-3.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FriedCorn/kmin-nodejs-3/issues"
+  },
+  "homepage": "https://github.com/FriedCorn/kmin-nodejs-3#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {}
+}
