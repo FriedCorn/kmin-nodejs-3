@@ -19,7 +19,7 @@ function createModel(modelName) {
     const dbFILE = path.resolve(DB_DIR, `${modelName}.json`);
 
     function create({ title, body }) {
-        let tasks = findAll();
+        const tasks = findAll();
         const lastId = tasks.length + 1;
 
         const newTask = {
