@@ -1,6 +1,22 @@
 const express = require('express');
-const { createTask, getAllTasks, getTaskById, updateTask, deleteTask } = require('./services/task-service');
+const mongoose = require('mongoose');
+
+const {
+    createTask,
+    getAllTasks,
+    getTaskById,
+    updateTask,
+    deleteTask
+} = require('./services/task-service');
 const PORT = process.env.PORT || 3000;
+mongoose.connect('mongodb://localhost/todolist-app', { useNewUrlParser: true, useUnifiedTopology: true });
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function () {
+    // we're connected!
+    console.log("Connected to MongoDB");
+});
 
 const app = express();
 app.use(express.json());
@@ -12,24 +28,30 @@ app.route("/tasks")
         if (!title) {
             return res.status(400).json({ message: "title is required" });
         }
-        const createdTask = createTask({ title, body });
-        res.send(createdTask);
+        createTask({ title, body }, (err, task) => {
+            if (err)
+                res.send(err);
+            else
+                res.json(task);
+        });
     })
     .get((req, res) => {
-        const allTask = getAllTasks();
-        if (allTask.length != 0)
-            res.send(allTask);
-        else
-            res.send("NO TASK");
+        getAllTasks((err, tasks) => {
+            if (err)
+                res.send(err);
+            else
+                res.json(tasks);
+        });
     });
 
 app.route("/tasks/:taskId")
     .get((req, res) => {
-        const foundTask = getTaskById(req.params.taskId);
-        if (foundTask != null)
-            res.send(foundTask);
-        else
-            res.send("NOT FOUND");
+        getTaskById(req.params.taskId, (err, task) => {
+            if (err)
+                res.send(err);
+            else
+                res.json(task);
+        });
     })
     .patch((req, res) => {
         const { title, body, completed } = req.body;

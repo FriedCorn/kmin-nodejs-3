@@ -52,3 +52,12 @@
 - Name
 - Created By
 - Created Date
+
+# MonggoDB
+
+NoSQL database
+
+Database => todo-app
+
+Table -> Collection => Tasks, Users
+Row -> Document
