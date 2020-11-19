@@ -6,7 +6,7 @@ const {
     getAllTasks,
     getTaskById,
     updateTask,
-    deleteTask
+    deleteTaskById
 } = require('./services/task-service');
 const PORT = process.env.PORT || 3000;
 mongoose.connect('mongodb://localhost/todolist-app', { useNewUrlParser: true, useUnifiedTopology: true });
@@ -25,47 +25,34 @@ app.route("/tasks")
     .post((req, res) => {
         const { title, body } = req.body;
 
-        if (!title) {
-            return res.status(400).json({ message: "title is required" });
-        }
-        createTask({ title, body }, (err, task) => {
-            if (err)
-                res.send(err);
-            else
-                res.json(task);
-        });
+        createTask({ title, body })
+            .then((task) => res.json(task))
+            .catch((error) => res.status(500).send(error))
     })
     .get((req, res) => {
-        getAllTasks((err, tasks) => {
-            if (err)
-                res.send(err);
-            else
-                res.json(tasks);
-        });
+        getAllTasks()
+            .then((tasks) => res.json(tasks))
+            .catch((error) => res.status(500).send(error));
     });
 
 app.route("/tasks/:taskId")
     .get((req, res) => {
-        getTaskById(req.params.taskId, (err, task) => {
-            if (err)
-                res.send(err);
-            else
-                res.json(task);
-        });
+        getTaskById(req.params.taskId)
+            .then((task) => res.json(task))
+            .catch((error) => res.status(500).send(error));
     })
     .patch((req, res) => {
         const { title, body, completed } = req.body;
-        const updatedTask = updateTask(req.params.taskId, { title, body, completed });
-        if (updateTask != null)
-            res.send(updatedTask);
-        else
-            res.send("Fail Updating");
+        const taskId = req.params.taskId;
+        updateTask(taskId, { title, body, completed })
+        .then((updatedTask) => res.json(updatedTask))
+        .catch((error) => res.status(500).send(error));
     })
     .delete((req, res) => {
-        if (deleteTask(req.params.taskId))
-            res.send("Deleted");
-        else
-            res.send("Fail");
+        const taskId = req.params.taskId;
+        deleteTaskById(taskId)
+        .then((task) => res.json(task))
+        .catch((error)=>res.status(500).send(error));
     });
 
 app.listen(PORT, () => {
