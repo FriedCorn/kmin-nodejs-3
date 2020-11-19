@@ -1,3 +1,4 @@
+const { time } = require('console');
 const fs = require('fs');
 const path = require('path');
 
@@ -16,29 +17,23 @@ function ensureDbFile(dbFile) {
 
 // Create model
 function createModel(modelName) {
-    const dbFILE = path.resolve(DB_DIR, `${modelName}.json`);
+    const dbFile = path.resolve(DB_DIR, `${modelName}.json`);
 
-    function create({ title, body }) {
-        const tasks = findAll();
-        const lastId = tasks.length + 1;
+    function create(newEntity) {
+        if (newEntity) {
+            const entities = findAll();
+            entities.push(newEntity);
+            saveAll(entities);
 
-        const newTask = {
-            id: lastId,
-            title,
-            body,
-            createdDate: new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString()
-        };
-
-        tasks.push(newTask);
-        saveAll(tasks);
-
-        return newTask;
+            return newEntity;
+        }
+        return null;
     }
 
     function findAll() {
-        ensureDbFile(dbFILE);
+        ensureDbFile(dbFile);
         try {
-            const tasksJson = fs.readFileSync(dbFILE, { encoding: "utf-8" });
+            const tasksJson = fs.readFileSync(dbFile, { encoding: "utf-8" });
             return JSON.parse(tasksJson);
         } catch (error) {
             return [];
@@ -46,23 +41,61 @@ function createModel(modelName) {
     }
 
     function findById(id) {
-        const tasks = findAll();
-        for (const i in tasks) {
-            if (tasks[i].id == id)
-                return tasks[i];
+        const entities = findAll();
+        for (const i in entities) {
+            if (entities[i].id == id)
+                return entities[i];
         }
         return null;
     }
 
-    function saveAll(tasks) {
-        ensureDbFile(dbFILE);
-        fs.writeFileSync(dbFILE, JSON.stringify(tasks));
+    function saveAll(entities) {
+        ensureDbFile(dbFile);
+        fs.writeFileSync(dbFile, JSON.stringify(entities));
+    }
+
+    function getIndex(entity) {
+        if (entity) {
+            const entities = findAll();
+            for (const i in entities) {
+                if (entity.id == entities[i].id)
+                    return i;
+            }
+        }
+        return undefined;
+    }
+
+    function update(entity) {
+        if (entity) {
+            const entities = findAll();
+            const i = getIndex(entity);
+            if (i != undefined) {
+                entities.splice(i, 1, entity);
+                saveAll(entities);
+                return entity;
+            }
+        }
+        return null;
+    }
+
+    function removeById(id) {
+        const entity = findById(id);
+        const i = getIndex(entity);
+        if (i != undefined) {
+            const entities = findAll();
+            const removedEntity = entities.splice(i, 1);
+            saveAll(entities);
+            return removedEntity;
+        }
+        return null;
     }
 
     return {
         create,
-        findAll, 
-        findById
+        findAll,
+        findById,
+        update,
+        removeById,
     };
 }
 
