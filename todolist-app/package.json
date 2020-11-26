@@ -17,8 +17,10 @@
   },
   "homepage": "https://github.com/FriedCorn/kmin-nodejs-3#readme",
   "dependencies": {
-    "express": "^4.17.1",
-    "mongoose": "^5.10.13"
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.10.15"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "express": "^4.17.1"
+  }
 }

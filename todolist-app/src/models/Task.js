@@ -8,7 +8,11 @@ const taskSchema = new mongoose.Schema({
     body: String,
     completed: Boolean,
     completedAt: String,
-    createdAt: String
+    createdAt: String,
+    userId: {
+        type: mongoose.SchemaTypes.ObjectId,
+        require: true,
+    }
 });
 
 const Task = mongoose.model("Task", taskSchema);
