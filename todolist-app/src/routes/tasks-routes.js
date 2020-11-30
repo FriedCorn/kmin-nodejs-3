@@ -70,13 +70,14 @@ tasksRouter
          .then((task) => {
             if (task) {
                taskService.deleteTaskById(taskId)
-                  .then((task) => res.json(task))
+                  .then(() => res.json(task))
                   .catch((error) => res.status(500).send(error));
             }
             else {
                res.send("Task doesn't exist");
             }
          })
+         .catch((error) => res.status.send(error));
    });
 
 module.exports = tasksRouter;

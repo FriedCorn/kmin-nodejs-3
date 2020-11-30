@@ -54,13 +54,8 @@ function updateTask(taskId, { title, body, completed, completedAt }) {
 
 function deleteTaskById(taskId) {
     return new Promise((resolve, reject) => {
-        Task.findByIdAndRemove({_id: taskId})
-            .then((task) => {
-                if (task)
-                    resolve(task)
-                else
-                    reject("Task doesn't exist. Deletion failed")
-            })
+        Task.deleteOne({_id: taskId})
+            .then((task) => resolve(task))
             .catch((error) => reject(error));
     });
 }
