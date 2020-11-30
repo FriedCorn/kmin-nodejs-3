@@ -1,10 +1,7 @@
-const { createModel } = require("../helper/model");
 const Task = require('../models/Task');
 
-const TaskJSONDB = createModel('tasks');
-
 // Create task
-function createTask({ title, body }) {
+function createTask({ title, body, userId }) {
     return new Promise((resolve, reject) => {
         Task.create(
             {
@@ -12,7 +9,8 @@ function createTask({ title, body }) {
                 body,
                 completed: false,
                 createdAt: new Date(),
-                completedAt: null
+                completedAt: null,
+                userId
             })
             .then((task) => resolve(task))
             .catch((error) => reject(error));
@@ -20,46 +18,35 @@ function createTask({ title, body }) {
 }
 
 // Get all tasks
-function getAllTasks() {
+function getAllTasks(userId) {
     return new Promise((resolve, reject) => {
-        Task.find()
-            .then((tasks) => {
-                if (tasks.length != 0)
-                    resolve(tasks);
-                else
-                    reject("Empty task list");
-            })
+        Task.find({userId: userId})
+            .then((tasks) => resolve(tasks))
             .catch((error) => reject(error));
     });
 }
 
 // Get task by ID
-function getTaskById(taskId) {
+function getTaskById(taskId, userId) {
     return new Promise((resolve, reject) => {
-        Task.findById(taskId)
+        Task.findById({_id: taskId})
             .then((task) => {
-                if (task)
-                    resolve(task);
-                reject("Task doesn't exist");
+                if (!task)
+                    resolve(null);
+                if (task.userId.toString() != userId)
+                    resolve(null);
+                resolve(task);
             })
             .catch((error) => reject(error));
     })
 }
 
-function updateTask(taskId, { title, body, completed }) {
+function updateTask(taskId, { title, body, completed, completedAt }) {
     return new Promise((resolve, reject) => {
-        Task.findById(taskId)
-            .then((foundTask) => {
-                if (foundTask) {
-                    let completedAt = null;
-                    if (completed == true)
-                        completedAt = new Date();
-                    Task.update({ _id: taskId }, { title, body, completed, completedAt})
-                        .catch((error) => reject(error));
-                    resolve(foundTask);
-                }
-                else
-                    reject("Task doesn't exist. Updation failed");
+        Task.updateOne({ _id: taskId }, { title, body, completed, completedAt })
+            .then((updatedTask) => {
+                updatedTask = Task.findById(taskId);
+                resolve(updatedTask);
             })
             .catch((error) => reject(error));
     });
@@ -67,7 +54,7 @@ function updateTask(taskId, { title, body, completed }) {
 
 function deleteTaskById(taskId) {
     return new Promise((resolve, reject) => {
-        Task.findByIdAndRemove(taskId)
+        Task.findByIdAndRemove({_id: taskId})
             .then((task) => {
                 if (task)
                     resolve(task)
