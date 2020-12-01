@@ -40,7 +40,7 @@ usersRouter
          })
          .then((user) => {
             if (user) {
-               const token = jwt.sign(user.toObject(), JWT_SECRET);
+               const token = jwt.sign(user.toObject(), JWT_SECRET, {expiresIn: 30});
                res.send(token);
             }
          })
