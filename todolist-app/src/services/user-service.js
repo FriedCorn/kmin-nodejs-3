@@ -17,7 +17,7 @@ const findUserById = (userId) => {
 // Find user by username
 const findUserByUsername = (username) => {
     return new Promise((resolve, reject) => {
-        return User.findOne({username: username})
+        User.findOne({username: username})
         .then((foundUser) => resolve(foundUser))
         .catch((error) => reject(error));
     });

@@ -1,0 +1,185 @@
+<html>
+
+<head>
+   <meta charset="utf-8">
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+   <title>To Do List App</title>
+</head>
+
+<body>
+   <div>My account: <span id="username">loading...</span></div>
+   <h1>Create new task</h1>
+   <form id="create_task_form">
+      <h3>Title</h3><input id="taskTitle" />
+      <h3>Body</h3><input id="taskBody" />
+      <button type="submit">Create task</button>
+   </form>
+   <br>
+   <h1>List all tasks</h1>
+   <form id="list_tasks_form">
+      <button type="submit">List all tasks</button>
+   </form>
+   <br>
+   <form id="update_task_form">
+      <ol>
+         <li>Coffee <input id="completed" type="checkbox" ></li>
+      </ol>
+      <button type="submit">Update task</button>
+   </form>
+</body>
+<script>
+   const token = localStorage.getItem("token");
+   async function getUser() {
+
+      const config = {
+         method: "GET", // *GET, POST, PUT, DELETE, etc.
+         mode: "cors", // no-cors, *cors, same-origin
+         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+         credentials: "same-origin", // include, *same-origin, omit
+         headers: {
+            "Content-Type": "application/json",
+            "x-token": token,
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+         },
+         redirect: "follow", // manual, *follow, error
+         referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+      };
+
+      // console.log(config);
+      try {
+         const response = await fetch(`/api/users/authentication`, config);
+         if (response.status == 400) {
+            location.href = "/login.html";
+            return;
+         }
+
+         const user = await response.json();
+
+         document.getElementById(
+            "username"
+         ).innerHTML = `<strong>${user.username}</strong>`;
+
+         console.log(user);
+      } catch (error) {
+         console.log(error);
+      }
+   }
+
+   async function createNewTask(e) {
+      e.preventDefault();
+      const title = document.getElementById("taskTitle").value;
+      const body = document.getElementById("taskBody").value;
+
+      const config = {
+         method: "POST", // *GET, POST, PUT, DELETE, etc.
+         mode: "cors", // no-cors, *cors, same-origin
+         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+         credentials: "same-origin", // include, *same-origin, omit
+         headers: {
+            "Content-Type": "application/json",
+            "x-token": token,
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+         },
+         redirect: "follow", // manual, *follow, error
+         referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+         body: JSON.stringify({ title, body }), // body data type must match "Content-Type" header
+      }
+
+      try {
+         const response = await fetch(`/api/tasks`, config);
+
+         if (response.status == 400) {
+            location.href = "/login.html";
+            return;
+         }
+
+         const data = await response.json();
+         console.log(data);
+
+      } catch (error) {
+         console.log(error);
+      }
+   }
+
+   async function getAllTasks(e) {
+      e.preventDefault();
+      const config = {
+         method: "GET", // *GET, POST, PUT, DELETE, etc.
+         mode: "cors", // no-cors, *cors, same-origin
+         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+         credentials: "same-origin", // include, *same-origin, omit
+         headers: {
+            "Content-Type": "application/json",
+            "x-token": token,
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+         },
+         redirect: "follow", // manual, *follow, error
+         referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+      };
+
+      try {
+         const response = await fetch("/api/tasks", config);
+
+         if (response.status == 400) {
+            location.href = "/login.html";
+            return;
+         }
+
+         const tasks = await response.json();
+
+         console.log(tasks)
+      } catch (error) {
+         console.log(error)
+      }
+   }
+
+   async function updateTask(e) {
+      e.preventDefault();
+      const completed = document.getElementById("completed").checked;
+      
+
+      return;
+      const config = {
+         method: "PATCH", // *GET, POST, PUT, DELETE, etc.
+         mode: "cors", // no-cors, *cors, same-origin
+         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+         credentials: "same-origin", // include, *same-origin, omit
+         headers: {
+            "Content-Type": "application/json",
+            "x-token": token,
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+         },
+         redirect: "follow", // manual, *follow, error
+         referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+         body: JSON.stringify({completed})
+      };
+
+      //try {
+      //   const response = await fetch("/api/tasks", config);
+//
+      //   if (response.status == 400) {
+      //      location.href = "/login.html";
+      //      return;
+      //   }
+//
+      //   const tasks = await response.json();
+//
+      //   console.log(tasks)
+      //} catch (error) {
+      //   console.log(error)
+      //}
+   }
+
+   getUser();
+
+   const form = document.getElementById("create_task_form");
+   form.addEventListener("submit", createNewTask);
+
+   const form_2 = document.getElementById("list_tasks_form")
+   form_2.addEventListener("submit", getAllTasks);
+
+   const form_3 = document.getElementById("update_task_form")
+   form_3.addEventListener("submit", updateTask);
+</script>
+
+</html>

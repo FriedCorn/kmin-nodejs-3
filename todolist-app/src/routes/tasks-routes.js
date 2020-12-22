@@ -23,7 +23,7 @@ tasksRouter
                res.json(tasks);
             }
             else
-               res.send("Empty list");
+               res.status(400).json({ message: "Empty list" });
          })
          .catch((error) => res.status(500).send(error));
    })
